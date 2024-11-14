@@ -11,18 +11,20 @@ function loadCards() {
         <div class="card" id="card-${index}">
             <div class="card-header">
                 <img src="${card.url}" alt="Company Logo" class="card-logo">
-                <h3>${card.companyName}</h3>
+                <div class="card-title">
+                    <h3>${card.companyName}</h3>
+                    ${card.isNew ? '<span class="tag new">NEW!</span>' : ''}
+                    ${card.isFeatured ? '<span class="tag featured">FEATURED</span>' : ''}
+                </div>
             </div>
             <div class="card-body">
                 <h2>${card.position}</h2>
-                <p>${card.time}</p>
-                <p>${card.location}</p>
-                <p>Job Type: ${card.jobType}</p>
+                <p>${card.time} • ${card.jobType} • ${card.location}</p>
             </div>
             <div class="card-footer">
-                ${card.skills.map(skill => `<span>${skill}</span>`).join(' ')}
-                <button class="delete-btn" data-id="card-${index}">Delete</button>
+                ${card.skills.map(skill => `<span class="job-tag">${skill}</span>`).join(' ')}
             </div>
+            <button class="delete-btn" data-id="card-${index}">Delete</button>
         </div>
         `;
         cardsContainer.innerHTML += cardHTML; 
@@ -49,13 +51,16 @@ function saveCard() {
         time,
         jobType,
         location,
+        isNew: document.querySelector('#checkbox1').checked,
+        isFeatured: document.querySelector('#checkbox2').checked,
         skills: []
     };
 
-    if (document.querySelector('#fullstack').checked) data.skills.push('Fullstack');
-    if (document.querySelector('#python').checked) data.skills.push('Python');
-    if (document.querySelector('#midweight').checked) data.skills.push('Midweight');
-    if (document.querySelector('#react').checked) data.skills.push('React');
+    if (document.querySelector('#fullstack').checked) data.skills.push('Frontend');
+    if (document.querySelector('#python').checked) data.skills.push('Senior');
+    if (document.querySelector('#midweight').checked) data.skills.push('HTML');
+    if (document.querySelector('#react').checked) data.skills.push('CSS');
+    if (document.querySelector('#react').checked) data.skills.push('JavaScript');
 
     const cards = JSON.parse(localStorage.getItem('jobCards')) || [];
     cards.push(data);
@@ -89,6 +94,8 @@ function resetForm() {
     document.querySelector('#python').checked = false;
     document.querySelector('#midweight').checked = false;
     document.querySelector('#react').checked = false;
+    document.querySelector('#checkbox1').checked = false;
+    document.querySelector('#checkbox2').checked = false;
 }
 
 button.addEventListener('click', (event) => {
